@@ -4,6 +4,7 @@ tensorflow
 torch
 clip-anytorch
 flask-cors
+faiss-cpu==1.7.4
 qrcode
 opencv-python
 python-dotenv
@@ -14,6 +15,7 @@ scikit-learn
 scipy
 urllib3
 Werkzeug
+
 
 
 
