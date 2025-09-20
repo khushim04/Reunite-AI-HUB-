@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost & Found - AI Powered System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Customizing Tailwind theme with a new color palette
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            '50': '#f0f9ff', '100': '#e0f2fe', '200': '#bae6fd', '300': '#7dd3fc', '400': '#38bdf8', '500': '#0ea5e9', '600': '#0284c7', '700': '#0369a1', '800': '#075985', '900': '#0c4a6e',
+                        },
+                        secondary: {
+                            '500': '#10b981', '600': '#059669'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #aaa; }
+    </style>
+</head>
+<body class="bg-primary-50 text-gray-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div>
+                <button id="show-main-view-btn" class="text-primary-600 font-semibold hover:text-primary-800 transition-colors">Home</button>
+            </div>
+            <div class="flex items-center space-x-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary-600"><path d="m12 1-11 6v10a2 2 0 0 0 2 2h18a2 2 0 0 0 2-2V7Z"/><path d="M12 22V12"/><path d="m21 7-9 5-9-5"/><path d="M3 7v10"/><path d="M21 7v10"/></svg>
+                <h1 class="text-2xl font-bold text-gray-800">Lost & Found</h1>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-8">
+
+        <div id="main-view">
+            <section class="text-center py-12 md:py-16">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">Lost & Found Portal – Report, Search, Recover</h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">AI-powered item recovery platform helps you find your lost items or report items you've found.</p>
+                <div class="mt-8 flex justify-center gap-4 flex-wrap">
+                    <button id="report-lost-btn" class="bg-primary-600 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-primary-700 transition-transform transform hover:scale-105">
+                        I Lost Something
+                    </button>
+                    <button id="report-found-btn" class="bg-secondary-500 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-secondary-600 transition-transform transform hover:scale-105">
+                        I Found Something
+                    </button>
+                </div>
+            </section>
+
+            <section>
+                <div id="search-notification" class="hidden mb-6 p-4 rounded-lg"></div>
+                <h3 id="grid-title" class="text-2xl font-bold text-gray-800 mb-6">Recently Found Items</h3>
+                <div id="items-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div id="empty-state" class="col-span-full text-center py-16 text-gray-500 hidden">
+                        <p class="text-lg font-medium">No items found.</p>
+                    </div>
+                    <div id="loading-state" class="col-span-full text-center py-16 text-gray-500">
+                        <p class="text-lg font-medium">Loading items...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div id="form-view" class="hidden">
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-xl">
+                <div id="form-submission-notification" class="hidden mb-6 p-4 rounded-lg"></div>
+                <h2 id="form-title" class="text-3xl font-bold text-center mb-6">Report an Item</h2>
+                <form id="report-form">
+                    <input type="hidden" id="report-type" value="found">
+                    <div class="space-y-6">
+                        <div>
+                            <label for="item-name" class="block text-sm font-medium text-gray-700">Item Name</label>
+                            <input type="text" id="item-name" name="item-name" required placeholder="e.g., Black Smartphone, Blue Umbrella" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500">
+                        </div>
+                        <div>
+                            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea id="description" name="description" rows="4" required placeholder="Provide details like brand, color, distinguishing marks, etc." class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500"></textarea>
+                        </div>
+                        <div>
+                            <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                            <input type="text" id="location" name="location" required placeholder="e.g., Central Park, Main Street Cafe" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Upload an Image (Optional)</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-gray-600">
+                                        <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                                            <span>Upload a file</span>
+                                            <input id="file-upload" name="file-upload" type="file" class="sr-only" accept="image/*">
+                                        </label>
+                                        <p class="pl-1">or drag and drop</p>
+                                    </div>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="contact" class="block text-sm font-medium text-gray-700">Your Contact Info (Email/Phone)</label>
+                            <input type="text" id="contact" name="contact" required placeholder="So we can notify you" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500">
+                        </div>
+                    </div>
+                    <div class="mt-8 flex justify-end gap-4">
+                        <button type="button" id="cancel-btn" class="bg-gray-200 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-300 transition-colors">Cancel</button>
+                        <button type="submit" id="submit-btn" class="text-white font-bold py-2 px-6 rounded-lg transition-colors">Submit Report</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-6 py-4 text-center">
+            <p>&copy; 2025 Lost & Found. Powered by AI and MongoDB.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DOM Elements ---
+        const mainView = document.getElementById('main-view');
+        const formView = document.getElementById('form-view');
+        const reportLostBtn = document.getElementById('report-lost-btn');
+        const reportFoundBtn = document.getElementById('report-found-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const showMainViewBtn = document.getElementById('show-main-view-btn');
+        const searchNotification = document.getElementById('search-notification');
+        const formSubmissionNotification = document.getElementById('form-submission-notification');
+        const formTitle = document.getElementById('form-title');
+        const submitBtn = document.getElementById('submit-btn');
+        const reportForm = document.getElementById('report-form');
+        const reportTypeInput = document.getElementById('report-type');
+        const itemsGrid = document.getElementById('items-grid');
+        const emptyState = document.getElementById('empty-state');
+        const loadingState = document.getElementById('loading-state');
+        const fileUploadInput = document.getElementById('file-upload');
+        const gridTitle = document.getElementById('grid-title');
+
+        // --- UI Navigation Logic ---
+        const showFormView = (type) => {
+            mainView.classList.add('hidden');
+            formView.classList.remove('hidden');
+            reportTypeInput.value = type;
+            document.getElementById('report-form').reset();
+            formSubmissionNotification.classList.add('hidden');
+
+            if (type === 'lost') {
+                formTitle.innerText = 'Search for a Lost Item';
+                submitBtn.innerText = 'Find Matches';
+                submitBtn.className = 'bg-primary-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-primary-700 transition-colors';
+            } else {
+                formTitle.innerText = 'Report a Found Item';
+                submitBtn.innerText = 'Submit Found Report';
+                submitBtn.className = 'bg-secondary-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-secondary-600 transition-colors';
+            }
+        };
+
+        const showMainView = () => {
+            formView.classList.add('hidden');
+            mainView.classList.remove('hidden');
+            reportForm.reset();
+            gridTitle.innerText = 'Recently Found Items';
+            // Reload recent items when returning to the main view
+            fetchRecentItems();
+        };
+
+        reportLostBtn.addEventListener('click', () => showFormView('lost'));
+        reportFoundBtn.addEventListener('click', () => showFormView('found'));
+        cancelBtn.addEventListener('click', showMainView);
+        showMainViewBtn.addEventListener('click', showMainView);
+
+        // --- API and Rendering Logic ---
+        const API_URL = 'http://localhost:5000';
+
+        // Function to fetch and display recent items
+        const fetchRecentItems = () => {
+            loadingState.classList.remove('hidden');
+            itemsGrid.innerHTML = '';
+            
+            fetch(`${API_URL}/api/found_items`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderItems(data.items, 'found');
+                })
+                .catch(error => {
+                    console.error('Error fetching recent items:', error);
+                    loadingState.innerHTML = '<p class="text-red-500">Failed to load items. Please check the backend server.</p>';
+                });
+        };
+
+        // Renders a list of items to the grid
+        const renderItems = (items, type) => {
+            itemsGrid.innerHTML = '';
+            loadingState.classList.add('hidden');
+
+            if (items.length === 0) {
+                emptyState.classList.remove('hidden');
+                document.querySelector('#empty-state p').textContent = "No items found.";
+            } else {
+                emptyState.classList.add('hidden');
+                items.forEach(item => {
+                    const date = item.timestamp ? new Date(item.timestamp * 1000).toLocaleDateString() : 'N/A';
+                    const isFound = type === 'found' || item.type === 'found';
+                    const cardColor = isFound ? 'border-secondary-500' : 'border-primary-500';
+                    const cardTextColor = isFound ? 'text-secondary-600' : 'text-primary-700';
+
+                    const itemCard = `
+                        <div class="item-card bg-white rounded-xl shadow-lg overflow-hidden border-t-4 ${cardColor} transform hover:-translate-y-2 transition-transform duration-300">
+                            <img src="${API_URL}/${item.image_url}" alt="${item.name}" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <div class="flex justify-between items-center">
+                                    <h4 class="text-xl font-bold">${item.name}</h4>
+                                    <span class="text-xs font-semibold uppercase px-2 py-1 rounded-full ${cardTextColor} bg-opacity-20 ${isFound ? 'bg-green-100' : 'bg-blue-100'}">${isFound ? 'Found' : 'Lost'}</span>
+                                </div>
+                                <p class="text-gray-600 mt-2">${item.description}</p>
+                                <p class="text-sm text-gray-500 mt-4">Location: ${item.location}</p>
+                                <p class="text-sm text-gray-500 mt-1">Date Reported: ${date}</p>
+                                ${item.similarity ? `
+                                    <div class="mt-4 pt-4 border-t">
+                                        <p class="text-sm font-bold text-primary-600">Similarity: ${item.similarity}%</p>
+                                    </div>
+                                ` : ''}
+                                <div class="mt-4 pt-4 border-t">
+                                    <p class="text-sm font-medium text-gray-800">Contact: ${item.contact}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    itemsGrid.innerHTML += itemCard;
+                });
+            }
+        };
+        
+        // Handle form submission
+        reportForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Processing...';
+
+            const formData = new FormData();
+            formData.append('item-name', document.getElementById('item-name').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('location', document.getElementById('location').value);
+            formData.append('contact', document.getElementById('contact').value);
+            
+            const imageFile = fileUploadInput.files[0];
+            if (imageFile) {
+                formData.append('file-upload', imageFile);
+            }
+
+            const reportType = document.getElementById('report-type').value;
+            const endpoint = reportType === 'found' ? `${API_URL}/found_item` : `${API_URL}/lost_item/search`;
+            
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Something went wrong.');
+                }
+
+                const data = await response.json();
+                
+                if (reportType === 'found') {
+                    formSubmissionNotification.className = 'mb-6 p-4 rounded-lg bg-green-100 border border-green-300 text-green-800';
+                    formSubmissionNotification.innerText = 'Report submitted successfully! Redirecting home...';
+                    setTimeout(showMainView, 2500);
+                } else { // Lost item search
+                    showMainView();
+                    gridTitle.innerText = 'Search Results';
+                    renderItems(data.matches, 'found'); // Assuming lost items are searching for found items
+                    searchNotification.classList.remove('hidden');
+                    searchNotification.className = 'mb-6 p-4 rounded-lg bg-blue-100 border border-blue-300 text-blue-800';
+                    if (data.matches.length > 0) {
+                        searchNotification.innerText = `Found ${data.matches.length} potential match(es).`;
+                    } else {
+                        searchNotification.innerText = 'No matches found. Please check back later!';
+                    }
+                }
+
+            } catch (error) {
+                console.error("API call failed:", error);
+                formSubmissionNotification.className = 'mb-6 p-4 rounded-lg bg-red-100 border border-red-300 text-red-800';
+                formSubmissionNotification.innerText = `Error: ${error.message}`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = reportType === 'lost' ? 'Find Matches' : 'Submit Found Report';
+                formSubmissionNotification.classList.remove('hidden');
+            }
+        });
+
+        // Initial data fetch on page load
+        fetchRecentItems();
+    </script>
+</body>
+</html>
