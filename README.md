@@ -46,17 +46,18 @@ It is designed for organizations, campuses, or communities where item tracking i
 Follow these steps to run the project locally:
 
 1. **Clone the repository:**
+   
     
 2. **Set up a virtual enviornment**
 python -m venv venv
 source venv/bin/activate       # Linux/Mac
 venv\Scripts\activate          # Windows
 
-3. **Install dependencies:**
+4. **Install dependencies:**
 pip install -r requirements.txt
 
-4. **Run the application:**
+5. **Run the application:**
 python app.py
 
-5. **Access the app in your browser:**
+6. **Access the app in your browser:**
 
