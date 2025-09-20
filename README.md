@@ -31,13 +31,15 @@ It is designed for organizations, campuses, or communities where item tracking i
 
 - **Frontend:** HTML, CSS, JavaScript  
 - **Backend:** Python (Flask)  
-- **Database:** MongoDB  
+- **Database:** MongoDB
 - **AI/ML:** TensorFlow / CLIP for image-text similarity  
 - **Deployment:** Render / AWS  
 
 ---
 
-## Make sure index.html should be in templater folder
+## Make sure **index.html** should be in  **template folder**
+
+---
 
 ## Installation
 
