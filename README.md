@@ -37,6 +37,8 @@ It is designed for organizations, campuses, or communities where item tracking i
 
 ---
 
+## Make sure index.html should be in templater folder
+
 ## Installation
 
 Follow these steps to run the project locally:
@@ -48,11 +50,11 @@ python -m venv venv
 source venv/bin/activate       # Linux/Mac
 venv\Scripts\activate          # Windows
 
-3.**Install dependencies:**
+3. **Install dependencies:**
 pip install -r requirements.txt
 
-4.**Run the application:**
+4. **Run the application:**
 python app.py
 
-5.**Access the app in your browser:**
+5. **Access the app in your browser:**
 
