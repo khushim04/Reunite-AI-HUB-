@@ -15,7 +15,10 @@ scikit-learn
 scipy
 urllib3
 Werkzeug
-transformers==4.44.0 
+transformers==4.42.4
+tokenizers==0.19.1
+
+
 
 
 
